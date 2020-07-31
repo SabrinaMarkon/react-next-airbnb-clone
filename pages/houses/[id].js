@@ -1,10 +1,14 @@
 import React from "react";
+import Head from "next/head";
 import houses from "../houses.json";
 
 const House = (props) => {
   // We get props from the getInitialProps function below.
   return (
     <div>
+      <Head>
+        <title>{props.house.title}</title>
+      </Head>
       <img src={props.house.picture} width="100%" alt="House picture" />
       <p>
         {props.house.type} - {props.house.town}
