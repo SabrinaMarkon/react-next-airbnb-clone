@@ -1,4 +1,3 @@
-import React from "react";
 import houses from "./houses.json";
 import House from "../components/House";
 import Layout from "../components/Layout";
