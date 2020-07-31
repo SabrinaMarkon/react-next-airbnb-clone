@@ -1,7 +1,28 @@
-import React from 'react';
+import React from "react";
+import houses from "../houses.json";
 
-export default () => (
+const House = (props) => {
+  // We get props from the getInitialProps function below.
+  return (
     <div>
-        <p>TEST</p>
+      <img src={props.house.picture} width="100%" alt="House picture" />
+      <p>
+        {props.house.type} - {props.house.town}
+      </p>
+      <p>{props.house.title}</p>
+      <p>
+        {props.house.rating} ({props.house.reviewsCount})
+      </p>
     </div>
-)
+  );
+};
+
+House.getInitialProps = ({ query }) => {
+  const { id } = query;
+  return {
+    // get the house object with matching ID from the houses.json file.
+    house: houses.filter((house) => house.id === id)[0],
+  };
+};
+
+export default House;
