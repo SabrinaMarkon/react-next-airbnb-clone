@@ -1,10 +1,12 @@
 import React from "react";
+import Header from "./Header";
 
 const Layout = (props) => {
   // the props.content property comes from the content prop
   // passed to Layout from its parent components.
   return (
     <div>
+      <Header />
       <main>{props.content}</main>
       {/* Global Styles */}
       <style jsx global>{`
