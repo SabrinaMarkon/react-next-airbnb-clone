@@ -1,9 +1,13 @@
+import Head from "next/head";
 import houses from "./houses.json";
 import House from "../components/House";
 import Layout from "../components/Layout";
 
 const content = (
   <div>
+    <Head>
+      <title>NextBNB</title>
+    </Head>
     <h1>Welcome to NextBNB!</h1>
     <div className="houses">
       {houses.map((house, index) => {
