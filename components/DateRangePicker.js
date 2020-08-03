@@ -21,6 +21,19 @@ const parseDate = (str, format, locale) => {
 const formatDate = (date, format, locale) =>
   dateFnsFormat(date, format, { locale });
 
+const numberOfNightsBetweenDates = (startDate, endDate) => {
+  const start = new Date(startDate); //clone
+  const end = new Date(endDate); //clone
+  let dayCount = 0;
+
+  while (end > start) {
+    dayCount++;
+    start.setDate(start.getDate() + 1);
+  }
+
+  return dayCount;
+};
+
 const DateRangePicker = () => {
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(tomorrow);
@@ -44,6 +57,13 @@ const DateRangePicker = () => {
           }}
           onDayChange={(day) => {
             setStartDate(day);
+            // if the start date is set after the end date, change the end date to be
+            // 1 day after the start date.
+            if (numberOfNightsBetweenDates(day, endDate) < 1) {
+                const newEndDate = new Date(day)
+                newEndDate.setDate(newEndDate.getDate() + 1)
+                setEndDate(newEndDate)
+              }
           }}
         />
       </div>
@@ -58,9 +78,9 @@ const DateRangePicker = () => {
           dayPickerProps={{
             modifiers: {
               disabled: [
-                new Date(),
+                startDate, // we can select startDate as the endDate
                 {
-                  before: new Date(),
+                  before: startDate, // we also can't select endDate before the startDate.
                 },
               ],
             },
