@@ -18,6 +18,7 @@ const format = "dd MMM yyyy";
 
 export default () => {
   const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
   <div className="date-range-picker-container">
     <div>
@@ -46,6 +47,16 @@ export default () => {
         format={format}
         parseDate={parseDate}
         placeholder={`${dateFnsFormat(new Date(), format)}`}
+        dayPickerProps={{
+          modifiers: {
+            disabled: {
+              before: new Date(),
+            },
+          },
+        }}
+        onDayChange={(day) => {
+          setEndDate(day);
+        }}
       />
     </div>
     <style jsx>{`
