@@ -16,7 +16,9 @@ const formatDate = (date, format, locale) =>
 
 const format = "dd MMM yyyy";
 
-export default () => (
+export default () => {
+  const [startDate, setStartDate] = useState(new Date());
+
   <div className="date-range-picker-container">
     <div>
       <label>From:</label>
@@ -31,6 +33,9 @@ export default () => (
               before: new Date(),
             },
           },
+        }}
+        onDayChange={(day) => {
+          setStartDate(day);
         }}
       />
     </div>
@@ -61,5 +66,5 @@ export default () => (
         font-size: 16px;
       }
     `}</style>
-  </div>
-);
+  </div>;
+};
