@@ -1,12 +1,16 @@
+import { useState } from "react";
 import Header from "./Header";
+import Modal from "./Modal";
 
 const Layout = (props) => {
   // the props.content property comes from the content prop
   // passed to Layout from its parent components.
+  const [showModal, setShowModal] = useState(true);
   return (
     <div>
       <Header />
       <main>{props.content}</main>
+      {showModal && <Modal close={() => setShowModal(false)}>test</Modal>}
       {/* Global Styles */}
       <style jsx global>{`
         body {
