@@ -1,16 +1,39 @@
 import { useState } from "react";
 import Header from "./Header";
 import Modal from "./Modal";
+import LoginModal from "./LoginModal";
+import RegistrationModal from "./RegistrationModal";
 
 const Layout = (props) => {
   // the props.content property comes from the content prop
   // passed to Layout from its parent components.
   const [showModal, setShowModal] = useState(true);
+  const [showLoginModal, setShowLoginModal] = useState(true); // default to showing the login modal.
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   return (
     <div>
       <Header />
       <main>{props.content}</main>
-      {showModal && <Modal close={() => setShowModal(false)}>test</Modal>}
+      {showModal && (
+        <Modal close={() => setShowModal(false)}>
+          {showLoginModal && (
+            <LoginModal
+              showSignup={() => {
+                setShowRegistrationModal(true);
+                setShowLoginModal(false);
+              }}
+            />
+          )}
+          {showRegistrationModal && (
+            <RegistrationModal
+              showLogin={() => {
+                setShowRegistrationModal(false);
+                setShowLoginModal(true);
+              }}
+            />
+          )}
+        </Modal>
+      )}
       {/* Global Styles */}
       <style jsx global>{`
         body {
@@ -21,6 +44,30 @@ const Layout = (props) => {
           font-size: 14px;
           line-height: 1.5;
           color: #333;
+        }
+        // Modal Styles for all modals.
+        button {
+          background-color: rgb(255, 90, 95);
+          color: white;
+          font-size: 13px;
+          width: 100%;
+          border: none;
+          height: 40px;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+          display: block;
+          padding: 20px;
+          font-size: 20px !important;
+          width: 100%;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+          margin-bottom: 10px;
         }
       `}</style>
       {/* Styles just for main tag */}
