@@ -1,8 +1,13 @@
-export default props => (
+export default (props) => (
   <>
     <h2>Sign up</h2>
     <div>
-      <form>
+      <form
+        onSubmit={(event) => {
+          alert("Sign up!");
+          event.preventDefault();
+        }}
+      >
         <input id="email" type="email" placeholder="Email address" />
         <input id="password" type="password" placeholder="Password" />
         <input
