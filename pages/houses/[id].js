@@ -1,8 +1,21 @@
-import { useState } from 'react';
+import { useState } from "react";
 import Head from "next/head";
 import houses from "../houses.json";
 import Layout from "../../components/Layout";
 import DateRangePicker from "../../components/DateRangePicker";
+
+const calcNumberOfNightsBetweenDates = (startDate, endDate) => {
+  const start = new Date(startDate); //clone
+  const end = new Date(endDate); //clone
+  let dayCount = 0;
+
+  while (end > start) {
+    dayCount++;
+    start.setDate(start.getDate() + 1);
+  }
+
+  return dayCount;
+};
 
 const House = (props) => {
   // We get props from the getInitialProps function below.
@@ -12,6 +25,9 @@ const House = (props) => {
 
   // Boolean to check if a date range is chosen so we know whether to display the price.
   const [dateChosen, setDateChosen] = useState(false);
+  const [numberOfNightsBetweenDates, setNumberOfNightsBetweenDates] = useState(
+    0
+  );
 
   return (
     <Layout
@@ -34,7 +50,9 @@ const House = (props) => {
             <h2>Add dates for prices</h2>
             <DateRangePicker
               datesChanged={(startDate, endDate) => {
-                // console.log(startDate, endDate);
+                setNumberOfNightsBetweenDates(
+                  calcNumberOfNightsBetweenDates(startDate, endDate)
+                );
                 setDateChosen(true);
               }}
             />
@@ -42,6 +60,11 @@ const House = (props) => {
               <div>
                 <h2>Price per night</h2>
                 <p>${props.house.price}</p>
+                <h2>Total price for booking</h2>
+                <p>
+                  ${(numberOfNightsBetweenDates * props.house.price).toFixed(2)}
+                </p>
+                <button className="reserve">Reserve</button>
               </div>
             )}
           </aside>
@@ -55,6 +78,17 @@ const House = (props) => {
             aside {
               border: 1px solid #ccc;
               padding: 20px;
+            }
+
+            button {
+              background-color: rgb(255, 90, 95);
+              color: white;
+              font-size: 13px;
+              width: 100%;
+              border: none;
+              height: 40px;
+              border-radius: 4px;
+              cursor: pointer;
             }
           `}</style>
         </div>
