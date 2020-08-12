@@ -14,7 +14,7 @@ export default (props) => (
       </form>
       <p>
         Don't have an account yet?{" "}
-        <a href="javascript:;" onClick={() => props.showSignup()}>
+        <a href="#" onClick={() => props.showSignup()}>
           Sign up
         </a>
       </p>
