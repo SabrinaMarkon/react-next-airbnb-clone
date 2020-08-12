@@ -1,20 +1,28 @@
 import { useState } from "react";
+import axios from "axios";
 
 const RegistrationModal = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordconfirmation, setPasswordconfirmation] = useState("");
 
+  const submit = async () => {
+    const response = await axios.post("/api/auth/register", {
+      email,
+      password,
+      passwordconfirmation,
+    });
+    console.log(response);
+  };
+
   return (
     <>
       <h2>Sign up</h2>
       <div>
-        <form
-          onSubmit={(event) => {
-            console.log(email, password, passwordconfirmation);
-            event.preventDefault();
-          }}
-        >
+        <form onSubmit={() => {
+          submit();
+          event.preventDefault();
+        }}>
           <input
             id="email"
             type="email"

@@ -21,6 +21,7 @@
   "homepage": "https://github.com/SabrinaMarkon/react-next-airbnb-clone#readme",
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
+    "axios": "^0.19.2",
     "date-fns": "^2.15.0",
     "easy-peasy": "^3.3.1",
     "next": "^9.5.1",
