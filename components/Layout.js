@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useStoreState, useStoreActions } from 'easy-peasy';
 import Header from "./Header";
 import Modal from "./Modal";
 import LoginModal from "./LoginModal";
 import RegistrationModal from "./RegistrationModal";
 
 const Layout = (props) => {
+  // Properties:
+  const showModal = useStoreState(state => state.modals.showModal);
+  const showLoginModal = useStoreState(state => state.modals.showLoginModal);
+  const showRegistrationModal = useStoreState(state => state.modals.showRegistrationModal);
+  
+  // Actions:
+  const setHideModal = useStoreActions(actions => actions.modals.setHideModal);
+  const setShowLoginModal = useStoreActions(actions => actions.modals.setShowLoginModal);
+  const setShowRegistrationModal = useStoreActions(actions => actions.modals.setShowRegistrationModal);
+
   // the props.content property comes from the content prop
   // passed to Layout from its parent components.
   return (
@@ -12,20 +22,18 @@ const Layout = (props) => {
       <Header />
       <main>{props.content}</main>
       {showModal && (
-        <Modal close={() => setShowModal(false)}>
+        <Modal close={() => setHideModal()}>
           {showLoginModal && (
             <LoginModal
               showSignup={() => {
-                setShowRegistrationModal(true);
-                setShowLoginModal(false);
+                setShowRegistrationModal();
               }}
             />
           )}
           {showRegistrationModal && (
             <RegistrationModal
               showLogin={() => {
-                setShowRegistrationModal(false);
-                setShowLoginModal(true);
+                setShowLoginModal();
               }}
             />
           )}
