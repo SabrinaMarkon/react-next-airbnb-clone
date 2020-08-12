@@ -7,8 +7,8 @@ import RegistrationModal from "./RegistrationModal";
 const Layout = (props) => {
   // the props.content property comes from the content prop
   // passed to Layout from its parent components.
-  const [showModal, setShowModal] = useState(true);
-  const [showLoginModal, setShowLoginModal] = useState(true); // default to showing the login modal.
+  const [showModal, setShowModal] = useState(false); // show no modals by default.
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   return (
     <div>
