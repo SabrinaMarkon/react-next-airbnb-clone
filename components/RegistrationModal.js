@@ -1,4 +1,4 @@
-export default (props) => (
+const RegistrationModal = (props) => (
   <>
     <h2>Sign up</h2>
     <div>
@@ -26,3 +26,5 @@ export default (props) => (
     </div>
   </>
 );
+
+export default RegistrationModal;
