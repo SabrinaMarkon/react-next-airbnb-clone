@@ -21,14 +21,14 @@ const Header = () => {
       <nav>
         <ul>
           <li>
-            <Link href="/register">
-              <a onClick={() => setShowRegistrationModal()}>Sign up</a>
-            </Link>
+            <a href="#" onClick={() => setShowRegistrationModal()}>
+              Sign up
+            </a>
           </li>
           <li>
-            <Link href="/login">
-              <a onClick={() => setShowLoginModal()}>Log in</a>
-            </Link>
+            <a href="#" onClick={() => setShowLoginModal()}>
+              Log in
+            </a>
           </li>
         </ul>
       </nav>
