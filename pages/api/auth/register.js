@@ -1,4 +1,4 @@
-import { User } from '../../../model';
+import { User } from "../../../model";
 
 // Need API route. Axios can POST here to create a new user.
 export default async (req, res) => {
@@ -8,11 +8,16 @@ export default async (req, res) => {
   }
   // console.log(req.body);
   const { email, password, passwordconfirmation } = req.body;
-  
+
   try {
     const user = await User.create({ email, password });
-    res.end(JSON.stringify({ status: 'success', message: 'User added!' }));
+    res.end(JSON.stringify({ status: "success", message: "User added!" }));
   } catch (error) {
-    res.end(JSON.stringify({ status: 'error', error }));
+    res.statusCode = 500; // So a code 200 isn't returned for a failure to add to the database.
+    let message = "An error occurred";
+    if (error.name === "SequelizeUniqueConstraintError") {
+      message = "User already exists"; // instead of displaying entire detailed error message to user.
+    }
+    res.end(JSON.stringify({ status: "error", message }));
   }
 };
