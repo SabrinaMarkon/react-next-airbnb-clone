@@ -9,6 +9,14 @@ export default async (req, res) => {
   // console.log(req.body);
   const { email, password, passwordconfirmation } = req.body;
 
+  // Make sure password fields match.
+  if (password !== passwordconfirmation) {
+    res.end(
+      JSON.stringify({ status: "error", message: "Passwords do not match" })
+    );
+    return;
+  }
+
   try {
     const user = await User.create({ email, password });
     res.end(JSON.stringify({ status: "success", message: "User added!" }));
