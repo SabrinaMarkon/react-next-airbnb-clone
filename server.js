@@ -83,6 +83,31 @@ nextApp.prepare().then(() => {
     passport.session() // handle login sessions.
   );
 
+  // user registration endpoint (moved from register.js to centralize API)
+  // Runs the code in passport.use(new LocalStrategy()) above.
+  server.post("api/auth/register", async (req, res) => {
+    const { email, password, passwordconfirmation } = req.body;
+
+    // Make sure password fields match.
+    if (password !== passwordconfirmation) {
+      res.end(
+        JSON.stringify({ status: "error", message: "Passwords do not match" })
+      );
+      return;
+    }
+
+    try {
+      const user = await User.create({ email, password });
+      res.end(JSON.stringify({ status: "success", message: "User added!" }));
+    } catch (error) {
+      let message = "An error occurred";
+      if (error.name === "SequelizeUniqueConstraintError") {
+        message = "User already exists"; // instead of displaying entire detailed error message to user.
+      }
+      res.end(JSON.stringify({ status: "error", message }));
+    }
+  });
+
   server.all("*", (req, res) => {
     return handle(req, res);
   });
