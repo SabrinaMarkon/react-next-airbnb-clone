@@ -27,18 +27,21 @@ const RegistrationModal = (props) => {
             id="email"
             type="email"
             placeholder="Email address"
+            required="required"
             onChange={(event) => setEmail(event.target.value)}
           />
           <input
             id="password"
             type="password"
             placeholder="Password"
+            required="required"
             onChange={(event) => setPassword(event.target.value)}
           />
           <input
             id="passwordconfirmation"
             type="password"
             placeholder="Enter password again"
+            required="required"
             onChange={(event) => setPasswordconfirmation(event.target.value)}
           />
           <button>Sign up</button>
