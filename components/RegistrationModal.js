@@ -13,7 +13,6 @@ const RegistrationModal = (props) => {
       passwordconfirmation,
     });
     console.log(response);
-    // alert("Hai!!!!");
   };
 
   return (
