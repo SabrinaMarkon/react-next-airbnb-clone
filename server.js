@@ -4,7 +4,6 @@
 const express = require("express");
 const session = require("express-session");
 const next = require("next");
-const { Sequelize } = require("sequelize/types");
 
 // The store for site sessions to be saved to the database instead of default in-memory storage:
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
@@ -13,7 +12,7 @@ const User = require("./model.js").User;
 const sequelize = require("./model.js").sequelize;
 // Configure the sessionStore variable:
 const sessionStore = new SequelizeStore({
-  db: Sequelize,
+  db: sequelize,
 });
 
 const port = parseInt(process.env.PORT, 10) || 3000;
@@ -50,4 +49,4 @@ nextApp.prepare().then(() => {
   });
 });
 
-sessionStore.sync(); // Only run this ONCE to automatically create the Sessions table in the database, then comment out.
+//sessionStore.sync(); // Only run this ONCE to automatically create the Sessions table in the database, then comment out.
