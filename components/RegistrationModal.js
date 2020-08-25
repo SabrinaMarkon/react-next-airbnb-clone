@@ -7,13 +7,13 @@ const RegistrationModal = (props) => {
   const [passwordconfirmation, setPasswordconfirmation] = useState("");
 
   const submit = async () => {
-    // const response = await axios.post("/api/auth/register", {
-    //   email,
-    //   password,
-    //   passwordconfirmation,
-    // });
-    // console.log(response);
-    alert("Hai!!!!");
+    const response = await axios.post("/api/auth/register", {
+      email,
+      password,
+      passwordconfirmation,
+    });
+    console.log(response);
+    // alert("Hai!!!!");
   };
 
   return (

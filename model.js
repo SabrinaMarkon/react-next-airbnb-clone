@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 
 const sequelize = new Sequelize(database, user, password, {
   host,
-  dialect: "postgres", // can be other kinds of databases not justs postgres.
+  dialect: "postgres", // can be other kinds of databases not just postgres.
   logging: false, // verbose - set to true to debug.
 });
 

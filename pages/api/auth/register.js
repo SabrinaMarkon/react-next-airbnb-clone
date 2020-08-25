@@ -21,7 +21,6 @@ export default async (req, res) => {
     const user = await User.create({ email, password });
     res.end(JSON.stringify({ status: "success", message: "User added!" }));
   } catch (error) {
-    res.statusCode = 500; // So a code 200 isn't returned for a failure to add to the database.
     let message = "An error occurred";
     if (error.name === "SequelizeUniqueConstraintError") {
       message = "User already exists"; // instead of displaying entire detailed error message to user.
