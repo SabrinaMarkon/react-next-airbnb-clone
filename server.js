@@ -15,6 +15,48 @@ const sessionStore = new SequelizeStore({
   db: sequelize,
 });
 
+const passport = require("passport");
+// passport-local is for handling authentication locally instead of third party sites (ie. facebook, github, etc.)
+const LocalStrategy = require("passport-local").Strategy;
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+    },
+    async function (email, password, done) {
+      if (!email || !password) {
+        done("Email and password are required", null);
+        return;
+      }
+      // Use Sequelize's findOne function to check if there is a user in the db:
+      const user = await User.findOne({ where: { email: email } });
+      if (!user) {
+        done("User not found", null);
+        return;
+      }
+      // check if password is valid using prototype function isPasswordValid from model.js:
+      const valid = await user.isPasswordValid(password);
+      if (!valid) {
+        done("Email and password do not match", null);
+        return;
+      }
+      done(null, user); // if user is found, pass the user object to done.
+    }
+  )
+);
+
+// Data we need to send to the user's browser as a cookie:
+passport.serializeUser((user, done) => {
+  done(null, user.email);
+});
+// Given the user information from the cookie (email), how to retrieve user data from db:
+passport.deserializeUser((email, done) => {
+  User.findOne({ where: { email: email } }).then((user) => {
+    done(null, user);
+  });
+});
+
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== "production";
 const nextApp = next({ dev });
@@ -35,8 +77,10 @@ nextApp.prepare().then(() => {
         secure: false, // CRITICAL on localhost (Copes, F.)
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       },
-      store: sessionStore // above configured to store sessions in db.
-    })
+      store: sessionStore, // above configured to store sessions in db.
+    }),
+    passport.initialize(), // initialize passport to be ready to use.
+    passport.session() // handle login sessions.
   );
 
   server.all("*", (req, res) => {
