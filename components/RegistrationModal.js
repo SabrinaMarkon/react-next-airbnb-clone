@@ -7,22 +7,32 @@ const RegistrationModal = (props) => {
   const [passwordconfirmation, setPasswordconfirmation] = useState("");
 
   const submit = async () => {
-    const response = await axios.post("/api/auth/register", {
-      email,
-      password,
-      passwordconfirmation,
-    });
-    console.log(response);
+    try {
+      const response = await axios.post("/api/auth/register", {
+        email,
+        password,
+        passwordconfirmation,
+      });
+      if (response.data.status === "error") {
+        alert(response.data.message);
+        return;
+      }
+    } catch (error) {
+      alert(error.response.data.message);
+      return;
+    }
   };
 
   return (
     <>
       <h2>Sign up</h2>
       <div>
-        <form onSubmit={() => {
-          submit();
-          event.preventDefault();
-        }}>
+        <form
+          onSubmit={() => {
+            submit();
+            event.preventDefault();
+          }}
+        >
           <input
             id="email"
             type="email"
