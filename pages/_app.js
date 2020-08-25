@@ -19,4 +19,20 @@ function MyApp({ Component, pageProps, user }) {
   );
 }
 
+MyApp.getInitialProps = async (appContext) => {
+  const appProps = await App.getInitialProps(appContext);
+  let user = null;
+  // if we do have the user info from the server, return it by adding it
+  // as a prop, otherwise user will = null by default.
+  if (
+    appContext.ctx.req &&
+    appContext.ctx.req.session &&
+    appContext.ctx.req.session.passport &&
+    appContext.ctx.req.session.passport.user
+  ) {
+    user = appContext.ctx.req.session.passport.user;
+  }
+  return { ...appProps, user: user };
+};
+
 export default MyApp;

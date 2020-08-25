@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useStoreActions } from "easy-peasy";
+import { useStoreActions, useStoreState } from "easy-peasy";
 
 const Header = () => {
   // get the state variable and functions from the modals object in store.js.
@@ -11,6 +11,8 @@ const Header = () => {
     (actions) => actions.modals.setShowRegistrationModal
   );
 
+  const user = useStoreState(state => state.user.user);
+
   return (
     <div className="nav-container">
       <Link href="/">
@@ -20,19 +22,29 @@ const Header = () => {
       </Link>
       <nav>
         <ul>
-          <li>
-            <a href="#" onClick={() => setShowRegistrationModal()}>
-              Sign up
-            </a>
-          </li>
-          <li>
-            <a href="#" onClick={() => setShowLoginModal()}>
-              Log in
-            </a>
-          </li>
+          {user ? (
+            <li className="username">{user}</li>
+          ) : (
+            <>
+              <li>
+                <a href="#" onClick={() => setShowRegistrationModal()}>
+                  Sign up
+                </a>
+              </li>
+              <li>
+                <a href="#" onClick={() => setShowLoginModal()}>
+                  Log in
+                </a>
+              </li>
+            </>
+          )}
         </ul>
       </nav>
       <style jsx>{`
+        .username {
+          padding: 1em 0.5em;
+        }
+
         ul {
           margin: 0;
           padding: 0;

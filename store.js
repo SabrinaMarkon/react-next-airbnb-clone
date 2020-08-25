@@ -23,6 +23,7 @@ export default createStore({
       state.showRegistrationModal = true;
     }),
   },
+  // In any component, get the username (email in this app) with const user = useStoreState(state => state.user.user) - see below user.user property. Knowing the user means we know they are logged in.
   user: {
     user: null,
     setUser: action((state, payload) => {
