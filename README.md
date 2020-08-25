@@ -3,3 +3,6 @@ Full stack AirBNB clone with server-side routing and rendering with Next.js and 
 
 Demo:
 
+
+Back End: PostgreSQL, Next.js
+Front End: React, Axios
