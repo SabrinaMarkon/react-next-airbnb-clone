@@ -1,0 +1,37 @@
+{
+  "name": "react-next-airbnb-clone",
+  "version": "1.0.0",
+  "description": "Full stack AirBNB clone with server-side routing and rendering with Next.js and Stripe payments.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SabrinaMarkon/react-next-airbnb-clone.git"
+  },
+  "keywords": [],
+  "author": "Sabrina Markon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SabrinaMarkon/react-next-airbnb-clone/issues"
+  },
+  "homepage": "https://github.com/SabrinaMarkon/react-next-airbnb-clone#readme",
+  "dependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "axios": "^0.19.2",
+    "bcrypt": "^5.0.0",
+    "date-fns": "^2.15.0",
+    "easy-peasy": "^3.3.1",
+    "express": "^4.17.1",
+    "next": "^9.5.1",
+    "nodemon": "^2.0.4",
+    "pg": "^8.3.0",
+    "react": "^16.13.1",
+    "react-day-picker": "^7.4.8",
+    "react-dom": "^16.13.1",
+    "sequelize": "^6.3.4"
+  }
+}
