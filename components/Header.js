@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useStoreActions, useStoreState } from "easy-peasy";
+import axios from "axios";
 
 const Header = () => {
   // get the state variable and functions from the modals object in store.js.
@@ -11,7 +12,9 @@ const Header = () => {
     (actions) => actions.modals.setShowRegistrationModal
   );
 
-  const user = useStoreState(state => state.user.user);
+  // check for logged in user - get state from easy-peasy store.
+  const user = useStoreState((state) => state.user.user);
+  const setUser = useStoreActions((actions) => actions.user.setUser);
 
   return (
     <div className="nav-container">
@@ -22,9 +25,23 @@ const Header = () => {
       </Link>
       <nav>
         <ul>
-          {user ? (
-            <li className="username">{user}</li>
+          {user ? ( // if a user is logged in:
+            <>
+              <li className="username">{user}</li>
+              <li>
+                <a
+                  href="#"
+                  onClick={async () => {
+                    await axios.post("/api/auth/logout");
+                    setUser(null);
+                  }}
+                >
+                  Log out
+                </a>
+              </li>
+            </>
           ) : (
+            // no user is logged in:
             <>
               <li>
                 <a href="#" onClick={() => setShowRegistrationModal()}>

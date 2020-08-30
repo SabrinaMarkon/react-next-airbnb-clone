@@ -112,7 +112,6 @@ nextApp.prepare().then(() => {
           JSON.stringify({ status: "success", message: "Logged in" })
         );
       });
-
     } catch (error) {
       let message = "An error occurred";
       if (error.name === "SequelizeUniqueConstraintError") {
@@ -120,6 +119,17 @@ nextApp.prepare().then(() => {
       }
       res.end(JSON.stringify({ status: "error", message }));
     }
+  });
+
+  server.post("/api/auth/logout", (req, res) => {
+    req.logout();
+    req.session.destroy();
+    return res.end(
+      JSON.stringify({
+        status: "success",
+        message: "Logged out",
+      })
+    );
   });
 
   server.all("*", (req, res) => {
