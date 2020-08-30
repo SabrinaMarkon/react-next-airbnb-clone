@@ -97,8 +97,24 @@ nextApp.prepare().then(() => {
     }
 
     try {
+      // Create user in database with User model (model.js).
       const user = await User.create({ email, password });
+
+      // Create a session so we can login the user immediately after they register.
+      req.login((user, err) => {
+        if (err) {
+          // res.statusCode = 500;
+          res.end(JSON.stringify({
+            status: 'error',
+            message: err
+          }));
+          return;
+        }
+      });
+
+      // Registration worked and user should be logged in!
       res.end(JSON.stringify({ status: "success", message: "User added!" }));
+
     } catch (error) {
       let message = "An error occurred";
       if (error.name === "SequelizeUniqueConstraintError") {
