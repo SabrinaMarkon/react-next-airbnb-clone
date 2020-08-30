@@ -13,6 +13,7 @@ const RegistrationModal = (props) => {
         password,
         passwordconfirmation,
       });
+      console.log(response);
       if (response.data.status === "error") {
         alert(response.data.message);
         return;
@@ -28,7 +29,7 @@ const RegistrationModal = (props) => {
       <h2>Sign up</h2>
       <div>
         <form
-          onSubmit={() => {
+          onSubmit={(event) => {
             submit();
             event.preventDefault();
           }}
