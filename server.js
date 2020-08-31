@@ -103,7 +103,7 @@ nextApp.prepare().then(() => {
       // Create a session so we can login the user immediately after they register.
       req.login(user, (err) => {
         if (err) {
-          res.statusCode = 500;
+          // res.statusCode = 500;
           res.end(JSON.stringify({ status: "error", message: err }));
           return;
         }
@@ -119,6 +119,41 @@ nextApp.prepare().then(() => {
       }
       res.end(JSON.stringify({ status: "error", message }));
     }
+  });
+
+  server.post("/api/auth/login", async (req, res) => {
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        // res.statusCode = 500;
+        res.end(
+          JSON.stringify({
+            status: "error",
+            message: err,
+          })
+        );
+        return;
+      }
+
+      req.login(user, (err) => {
+        if (err) {
+          // res.statusCode = 500;
+          res.end(
+            JSON.stringify({
+              status: "error",
+              message: err,
+            })
+          );
+          return;
+        }
+
+        return res.end(
+          JSON.stringify({
+            status: "success",
+            message: "Logged in",
+          })
+        );
+      });
+    })(req, res, next);
   });
 
   server.post("/api/auth/logout", (req, res) => {
