@@ -122,19 +122,32 @@ nextApp.prepare().then(() => {
   });
 
   server.post("/api/auth/login", async (req, res) => {
+    // const { email, password } = req.body;
+
     passport.authenticate("local", (err, user, info) => {
       if (err) {
         // res.statusCode = 500;
         res.end(
           JSON.stringify({
             status: "error",
-            message: err,
+            message: err + ' cats',
           })
         );
         return;
       }
 
-      req.login(user, (err) => {
+      if (!user) {
+        // res.statusCode = 500;
+        res.end(
+          JSON.stringify({
+            status: 'error',
+            message: 'No user matching credentials'
+          })
+        );
+        return;
+      }
+
+      req.login(user, err => {
         if (err) {
           // res.statusCode = 500;
           res.end(
@@ -152,6 +165,7 @@ nextApp.prepare().then(() => {
             message: "Logged in",
           })
         );
+
       });
     })(req, res, next);
   });
