@@ -124,50 +124,50 @@ nextApp.prepare().then(() => {
   });
 
   server.post("/api/auth/login", async (req, res) => {
-    console.log("body parsing", req.body);
-    // passport.authenticate("local", (err, user, info) => {
-    //   if (err) {
-    //     res.statusCode = 500;
-    //     res.end(
-    //       JSON.stringify({
-    //         status: "error",
-    //         message: err,
-    //       })
-    //     );
-    //     return;
-    //   }
+    // console.log("body parsing", req.body); // undefined without body-parser middleware!!!
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        res.statusCode = 500;
+        res.end(
+          JSON.stringify({
+            status: "error",
+            message: err,
+          })
+        );
+        return;
+      }
 
-    //   if (!user) {
-    //     res.statusCode = 500;
-    //     res.end(
-    //       JSON.stringify({
-    //         status: "error",
-    //         message: "No user matching credentials" + hi,
-    //       })
-    //     );
-    //     return;
-    //   }
+      if (!user) {
+        res.statusCode = 500;
+        res.end(
+          JSON.stringify({
+            status: "error",
+            message: "No user matching credentials" + hi,
+          })
+        );
+        return;
+      }
 
-    //   req.login(user, (err) => {
-    //     if (err) {
-    //       res.statusCode = 500;
-    //       res.end(
-    //         JSON.stringify({
-    //           status: "error",
-    //           message: err,
-    //         })
-    //       );
-    //       return;
-    //     }
+      req.login(user, (err) => {
+        if (err) {
+          res.statusCode = 500;
+          res.end(
+            JSON.stringify({
+              status: "error",
+              message: err,
+            })
+          );
+          return;
+        }
 
-    //     return res.end(
-    //       JSON.stringify({
-    //         status: "success",
-    //         message: "Logged in",
-    //       })
-    //     );
-    //   });
-    // })(req, res, next);
+        return res.end(
+          JSON.stringify({
+            status: "success",
+            message: "Logged in",
+          })
+        );
+      });
+    })(req, res, next);
   });
 
   server.post("/api/auth/logout", (req, res) => {
