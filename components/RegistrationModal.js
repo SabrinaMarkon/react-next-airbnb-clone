@@ -12,7 +12,7 @@ const RegistrationModal = (props) => {
     (actions) => actions.modals.setHideModal
   );
 
-  const submit = async () => {
+  const handleSubmit = async () => {
     try {
       const response = await axios.post("/api/auth/register", {
         email,
@@ -39,7 +39,7 @@ const RegistrationModal = (props) => {
       <div>
         <form
           onSubmit={(event) => {
-            submit();
+            handleSubmit();
             event.preventDefault();
           }}
         >
