@@ -68,7 +68,7 @@ const RegistrationModal = (props) => {
         </form>
         <p>
           Already have an account?{" "}
-          <a href="" onClick={() => props.showLogin()}>
+          <a href="#" onClick={() => props.showLogin()}>
             Log in
           </a>
         </p>
