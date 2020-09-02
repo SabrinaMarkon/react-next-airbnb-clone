@@ -3,6 +3,7 @@
 // webpack pipeline that Next.js usually does (Copes, F.).
 const express = require("express");
 const session = require("express-session");
+const bodyParser = require('body-parser');
 const next = require("next");
 
 // The store for site sessions to be saved to the database instead of default in-memory storage:
@@ -64,8 +65,9 @@ const handle = nextApp.getRequestHandler();
 
 nextApp.prepare().then(() => {
   const server = express();
-
   // middleware for handling sessions:
+  server.use(bodyParser.urlencoded({ extended: false })) // parse application/x-www-form-urlencoded
+  server.use(bodyParser.json()) // parse application/json
   server.use(
     session({
       secret:
@@ -121,51 +123,52 @@ nextApp.prepare().then(() => {
     }
   });
 
-  server.post('/api/auth/login', async (req, res) => {
-    passport.authenticate('local', (err, user, info) => {
-      if (err) {
-        res.statusCode = 500
-        res.end(
-          JSON.stringify({
-            status: 'error',
-            message: err
-          })
-        )
-        return
-      }
-  
-      if (!user) {
-        res.statusCode = 500
-        res.end(
-          JSON.stringify({
-            status: 'error',
-            message: 'No user matching credentials'
-          })
-        )
-        return
-      }
-  
-      req.login(user, err => {
-        if (err) {
-          res.statusCode = 500
-          res.end(
-            JSON.stringify({
-              status: 'error',
-              message: err
-            })
-          )
-          return
-        }
-  
-        return res.end(
-          JSON.stringify({
-            status: 'success',
-            message: 'Logged in'
-          })
-        )
-      })
-    })(req, res, next)
-  })
+  server.post("/api/auth/login", async (req, res) => {
+    console.log("body parsing", req.body);
+    // passport.authenticate("local", (err, user, info) => {
+    //   if (err) {
+    //     res.statusCode = 500;
+    //     res.end(
+    //       JSON.stringify({
+    //         status: "error",
+    //         message: err,
+    //       })
+    //     );
+    //     return;
+    //   }
+
+    //   if (!user) {
+    //     res.statusCode = 500;
+    //     res.end(
+    //       JSON.stringify({
+    //         status: "error",
+    //         message: "No user matching credentials" + hi,
+    //       })
+    //     );
+    //     return;
+    //   }
+
+    //   req.login(user, (err) => {
+    //     if (err) {
+    //       res.statusCode = 500;
+    //       res.end(
+    //         JSON.stringify({
+    //           status: "error",
+    //           message: err,
+    //         })
+    //       );
+    //       return;
+    //     }
+
+    //     return res.end(
+    //       JSON.stringify({
+    //         status: "success",
+    //         message: "Logged in",
+    //       })
+    //     );
+    //   });
+    // })(req, res, next);
+  });
 
   server.post("/api/auth/logout", (req, res) => {
     req.logout();
