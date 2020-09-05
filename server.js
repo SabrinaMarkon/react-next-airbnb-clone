@@ -3,15 +3,15 @@
 // webpack pipeline that Next.js usually does (Copes, F.).
 const express = require("express");
 const session = require("express-session");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 const next = require("next");
 
 // The store for site sessions to be saved to the database instead of default in-memory storage:
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 // require User model.
 const User = require("./models/user.js");
-const House = require('./models/house.js');
-const Review = require('./models/review.js');
+const House = require("./models/house.js");
+const Review = require("./models/review.js");
 
 // require database and sequelize:
 const sequelize = require("./database.js");
@@ -70,8 +70,8 @@ const handle = nextApp.getRequestHandler();
 nextApp.prepare().then(() => {
   const server = express();
   // middleware for handling sessions:
-  server.use(bodyParser.urlencoded({ extended: false })) // parse application/x-www-form-urlencoded
-  server.use(bodyParser.json()) // parse application/json
+  server.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
+  server.use(bodyParser.json()); // parse application/json
   server.use(
     session({
       secret:
@@ -185,6 +185,16 @@ nextApp.prepare().then(() => {
     );
   });
 
+  server.get("/api/houses", (req, res) => {
+    House.findAndCountAll().then((result) => {
+      const houses = result.rows.map((house) => house.dataValues);
+      res.writeHead(200, {
+        "Content-type": "application/json",
+      });
+      res.end(JSON.stringify(houses));
+    });
+  });
+
   server.all("*", (req, res) => {
     return handle(req, res);
   });
@@ -198,6 +208,6 @@ nextApp.prepare().then(() => {
 //sessionStore.sync(); // Only run this ONCE to automatically create the Sessions table in the database, then comment out.
 
 // Keep these during development so they update the table whenever that model is changed.
-User.sync({ alter: true })
-House.sync({ alter: true })
-Review.sync({ alter: true })
+User.sync({ alter: true });
+House.sync({ alter: true });
+Review.sync({ alter: true });
