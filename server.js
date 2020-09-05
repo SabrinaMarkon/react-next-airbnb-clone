@@ -8,9 +8,10 @@ const next = require("next");
 
 // The store for site sessions to be saved to the database instead of default in-memory storage:
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
-// require User & sequelize properties from the model:
+// require User property from the model:
 const User = require("./model.js").User;
-const sequelize = require("./model.js").sequelize;
+// require database and sequelize:
+const sequelize = require("./database.js");
 // Configure the sessionStore variable:
 const sessionStore = new SequelizeStore({
   db: sequelize,
