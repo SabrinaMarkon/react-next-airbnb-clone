@@ -10,6 +10,9 @@ const next = require("next");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 // require User model.
 const User = require("./models/user.js");
+const House = require('./models/house.js');
+const Review = require('./models/review.js');
+
 // require database and sequelize:
 const sequelize = require("./database.js");
 // Configure the sessionStore variable:
@@ -193,3 +196,8 @@ nextApp.prepare().then(() => {
 });
 
 //sessionStore.sync(); // Only run this ONCE to automatically create the Sessions table in the database, then comment out.
+
+// Keep these during development so they update the table whenever that model is changed.
+User.sync({ alter: true })
+House.sync({ alter: true })
+Review.sync({ alter: true })

@@ -1,18 +1,19 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../database.js");
+const DataTypes = Sequelize.DataTypes;
 
 class Review extends Sequelize.Model {}
 
 Review.init(
   {
     id: {
-      type: Sequelize.DataTypes.INTEGER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    houseId: { type: Sequelize.DataTypes.INTEGER, allowNull: false },
-    userId: { type: Sequelize.DataTypes.INTEGER, allowNull: false },
-    comment: { type: Sequelize.DataTypes.TEXT, allowNull: false },
+    houseId: { type: DataTypes.INTEGER, allowNull: false },
+    userId: { type: DataTypes.INTEGER, allowNull: false },
+    comment: { type: DataTypes.TEXT, allowNull: false },
   },
   {
     sequelize,

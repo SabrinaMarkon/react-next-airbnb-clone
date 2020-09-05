@@ -1,32 +1,33 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../database.js");
+const DataTypes = Sequelize.DataTypes;
 
 class House extends Sequelize.Model {}
 
 House.init(
   {
     id: {
-      type: Sequelize.DataTypes.INTEGER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    host: { type: Sequelize.DataTypes.INTEGER, allowNull: false },
-    picture: { type: Sequelize.DataTypes.STRING, allowNull: false },
-    type: { type: Sequelize.DataTypes.STRING, allowNull: false },
-    town: { type: Sequelize.DataTypes.STRING, allowNull: false },
-    title: { type: Sequelize.DataTypes.STRING, allowNull: false },
-    price: { type: Sequelize.DataTypes.INTEGER, allowNull: false },
-    superhost: { type: Sequelize.DataTypes.BOOLEAN, allowNull: false },
-    description: { type: Sequelize.DataTypes.TEXT },
-    guests: { type: Sequelize.DataTypes.INTEGER, allowNull: false },
-    bedrooms: { type: Sequelize.DataTypes.INTEGER, allowNull: false },
-    beds: { type: Sequelize.DataTypes.INTEGER, allowNull: false },
-    baths: { type: Sequelize.DataTypes.INTEGER, allowNull: false },
-    wifi: { type: Sequelize.DataTypes.BOOLEAN, allowNull: false },
-    kitchen: { type: Sequelize.DataTypes.BOOLEAN, allowNull: false },
-    heating: { type: Sequelize.DataTypes.BOOLEAN, allowNull: false },
-    freeParking: { type: Sequelize.DataTypes.BOOLEAN, allowNull: false },
-    entirePlace: { type: Sequelize.DataTypes.BOOLEAN, allowNull: false },
+    host: { type: DataTypes.INTEGER, allowNull: false },
+    picture: { type: DataTypes.STRING, allowNull: false },
+    type: { type: DataTypes.STRING, allowNull: false },
+    town: { type: DataTypes.STRING, allowNull: false },
+    title: { type: DataTypes.STRING, allowNull: false },
+    price: { type: DataTypes.INTEGER, allowNull: false },
+    superhost: { type: DataTypes.BOOLEAN, allowNull: false },
+    description: { type: DataTypes.TEXT },
+    guests: { type: DataTypes.INTEGER, allowNull: false },
+    bedrooms: { type: DataTypes.INTEGER, allowNull: false },
+    beds: { type: DataTypes.INTEGER, allowNull: false },
+    baths: { type: DataTypes.INTEGER, allowNull: false },
+    wifi: { type: DataTypes.BOOLEAN, allowNull: false },
+    kitchen: { type: DataTypes.BOOLEAN, allowNull: false },
+    heating: { type: DataTypes.BOOLEAN, allowNull: false },
+    freeParking: { type: DataTypes.BOOLEAN, allowNull: false },
+    entirePlace: { type: DataTypes.BOOLEAN, allowNull: false },
   },
   {
     sequelize,
@@ -35,4 +36,4 @@ House.init(
   }
 );
 
-model.exports = House;
+module.exports = House;

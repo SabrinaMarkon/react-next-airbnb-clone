@@ -1,8 +1,9 @@
 const bcrypt = require("bcrypt");
 const Sequelize = require("sequelize"); // To access Sequelize DataTypes and Sequelize.Model.
 const sequelize = require("../database.js"); // Instance of db connection.
+const DataTypes = Sequelize.DataTypes;
 
-class User extends Sequelize.Modal {}
+class User extends Sequelize.Model {}
 
 User.init(
   {
