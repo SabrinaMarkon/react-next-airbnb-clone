@@ -195,6 +195,27 @@ nextApp.prepare().then(() => {
     });
   });
 
+  server.get("/api/houses/:id", (req, res) => {
+    const { id } = req.params;
+    House.findByPk(id).then((house) => {
+      if (house) {
+        res.writeHead(200, {
+          "Content-type": "application/json",
+        });
+        res.end(JSON.stringify(house.dataValues));
+      } else {
+        res.writeHead(404, {
+          "Content-type": "application/json",
+        });
+        res.end(
+          JSON.stringify({
+            message: "Not found",
+          })
+        );
+      }
+    });
+  });
+
   server.all("*", (req, res) => {
     return handle(req, res);
   });

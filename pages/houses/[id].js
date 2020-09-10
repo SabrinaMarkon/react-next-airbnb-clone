@@ -1,3 +1,5 @@
+// For the details of a house.
+
 import { useState } from "react";
 import { useStoreActions } from "easy-peasy";
 import Head from "next/head";

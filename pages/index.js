@@ -1,3 +1,5 @@
+// For the list of houses.
+
 import fetch from "isomorphic-unfetch";
 import Head from "next/head";
 import House from "../components/House";
@@ -31,6 +33,10 @@ const Index = (props) => {
   );
 };
 
+// Get the houses from the database first to populate the houses
+// array in the JSX above, so there is data available for the first
+// page render.
+// TODO: Add pagination.
 Index.getInitialProps = async () => {
   // domain and port hardcoded because full path is needed. 
   // Extract to env variable instead.
