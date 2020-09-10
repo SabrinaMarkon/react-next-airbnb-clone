@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useStoreActions } from "easy-peasy";
+import fetch from "isomorphic-unfetch";
 import Head from "next/head";
-import houses from "../houses.json";
 import Layout from "../../components/Layout";
 import DateRangePicker from "../../components/DateRangePicker";
 
@@ -96,11 +96,12 @@ const House = (props) => {
   );
 };
 
-House.getInitialProps = ({ query }) => {
+House.getInitialProps = async ({ query }) => {
   const { id } = query;
+  const res = await fetch(`http://localhost:3000/api/houses/${id}`);
+  const house = await res.json();
   return {
-    // get the house object with matching ID from the houses.json file.
-    house: houses.filter((house) => house.id === id)[0],
+    house,
   };
 };
 
