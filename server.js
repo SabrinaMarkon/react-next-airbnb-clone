@@ -12,6 +12,7 @@ const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const User = require("./models/user.js");
 const House = require("./models/house.js");
 const Review = require("./models/review.js");
+const Booking = require("./models/booking.js");
 
 // require database and sequelize:
 const sequelize = require("./database.js");
@@ -245,3 +246,4 @@ nextApp.prepare().then(() => {
 User.sync({ alter: true });
 House.sync({ alter: true });
 Review.sync({ alter: true });
+Booking.sync({ alter: true });

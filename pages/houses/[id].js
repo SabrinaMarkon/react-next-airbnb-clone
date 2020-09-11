@@ -1,8 +1,9 @@
 // For the details of a house.
 
+import fetch from "isomorphic-unfetch"; // for SSR.
+import axios from "axios";
 import { useState } from "react";
 import { useStoreActions, useStoreState } from "easy-peasy";
-import fetch from "isomorphic-unfetch";
 import Head from "next/head";
 import Layout from "../../components/Layout";
 import DateRangePicker from "../../components/DateRangePicker";
@@ -31,6 +32,8 @@ const House = (props) => {
   const [numberOfNightsBetweenDates, setNumberOfNightsBetweenDates] = useState(
     0
   );
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
 
   // User value:
   const user = useStoreState((state) => state.user.user);
@@ -78,6 +81,8 @@ const House = (props) => {
                   calcNumberOfNightsBetweenDates(startDate, endDate)
                 );
                 setDateChosen(true);
+                setStartDate(startDate);
+                setEndDate(endDate);
               }}
             />
             {dateChosen && (
@@ -91,10 +96,25 @@ const House = (props) => {
                 {user ? (
                   <button
                     className="reserve"
-                    onClick={
-                      // user is already logged in.
-                      // TODO: reservation code.
-                    }
+                    onClick={async () => {
+                      try {
+                        const response = await axios.post(
+                          "/api/houses/reserve",
+                          {
+                            houseId: props.house.id,
+                            startDate,
+                            endDate,
+                          }
+                        );
+                        if (response.data.status === "error") {
+                          alert(response.data.message);
+                          return;
+                        }
+                      } catch (error) {
+                        console.log(error);
+                        return;
+                      }
+                    }}
                   >
                     Reserve
                   </button>
