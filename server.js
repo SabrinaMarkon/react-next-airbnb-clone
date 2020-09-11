@@ -199,10 +199,23 @@ nextApp.prepare().then(() => {
     const { id } = req.params;
     House.findByPk(id).then((house) => {
       if (house) {
-        res.writeHead(200, {
-          "Content-type": "application/json",
+        // Get reviews from database:
+        Review.findAndCountAll({
+          where: {
+            houseId: house.id,
+          },
+        }).then((reviews) => {
+          house.dataValues.reviews = reviews.rows.map(
+            (review) => review.dataValues
+          );
+          // Attach the reviews to the data sent to the response:
+          house.dataValues.reviewsCount = reviews.count;
+
+          res.writeHead(200, {
+            "Content-type": "application/json",
+          });
+          res.end(JSON.stringify(house.dataValues));
         });
-        res.end(JSON.stringify(house.dataValues));
       } else {
         res.writeHead(404, {
           "Content-type": "application/json",
