@@ -1,7 +1,7 @@
 // For the details of a house.
 
 import { useState } from "react";
-import { useStoreActions } from "easy-peasy";
+import { useStoreActions, useStoreState } from "easy-peasy";
 import fetch from "isomorphic-unfetch";
 import Head from "next/head";
 import Layout from "../../components/Layout";
@@ -31,6 +31,9 @@ const House = (props) => {
   const [numberOfNightsBetweenDates, setNumberOfNightsBetweenDates] = useState(
     0
   );
+
+  // User value:
+  const user = useStoreState((state) => state.user.user);
 
   // Get the login modal method from global state when the user clicks "Reserve" button.
   const setShowLoginModal = useStoreActions(
@@ -85,9 +88,26 @@ const House = (props) => {
                 <p>
                   ${(numberOfNightsBetweenDates * props.house.price).toFixed(2)}
                 </p>
-                <button className="reserve" onClick={() => setShowLoginModal()}>
-                  Reserve
-                </button>
+                {user ? (
+                  <button
+                    className="reserve"
+                    onClick={
+                      // user is already logged in.
+                      // TODO: reservation code.
+                    }
+                  >
+                    Reserve
+                  </button>
+                ) : (
+                  <button
+                    className="reserve"
+                    onClick={() => {
+                      setShowLoginModal();
+                    }}
+                  >
+                    Log in to Reserve
+                  </button>
+                )}
               </div>
             )}
           </aside>
