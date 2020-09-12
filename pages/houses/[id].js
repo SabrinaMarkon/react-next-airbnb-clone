@@ -1,5 +1,7 @@
 // For the details of a house.
 
+// TODO: add full domain and port to an env. variable instead of hard-coded.
+
 import fetch from "isomorphic-unfetch"; // for SSR.
 import axios from "axios";
 import { useState } from "react";
@@ -19,6 +21,27 @@ const calcNumberOfNightsBetweenDates = (startDate, endDate) => {
   }
 
   return dayCount;
+};
+
+// Get array of all dates this house is booked for already:
+const getBookedDates = async () => {
+  try {
+    const houseId = house.id;
+    const response = await axios.post(
+      "http://localhost:3000/api/houses/booked",
+      {
+        houseId,
+      }
+    );
+    if (response.data.status === "error") {
+      alert(response.data.message);
+      return;
+    }
+    return response.data.dates;
+  } catch (error) {
+    console.error(error);
+    return;
+  }
 };
 
 const House = (props) => {
@@ -153,8 +176,10 @@ House.getInitialProps = async ({ query }) => {
   const { id } = query;
   const res = await fetch(`http://localhost:3000/api/houses/${id}`);
   const house = await res.json();
+  const bookedDates = await getBookedDates(id); // passed as a prop to House.
   return {
     house,
+    bookedDates,
   };
 };
 
