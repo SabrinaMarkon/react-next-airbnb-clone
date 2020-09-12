@@ -197,6 +197,7 @@ nextApp.prepare().then(() => {
     });
   });
 
+  // Get list of all dates that a house is booked:
   const getDatesBetweenDates = (startDate, endDate) => {
     let dates = [];
     while (startDate < endDate) {
@@ -225,12 +226,33 @@ nextApp.prepare().then(() => {
       bookedDates = [...bookedDates, ...dates];
     }
     // remove duplicates:
+    console.log(bookedDates);
     bookedDates = [...new Set(bookedDates.map(date => date))];
     res.json({
       status: "success",
       message: "ok",
       dates: bookedDates,
     });
+  });
+
+  // Check that a date range to book a house is already taken or available:
+  const canBookThoseDates = async (houseId, startDate, endDate) => {
+    // Find overlapping dates in the database.
+    const results = await Booking.findAll({
+      where: {
+        houseId: houseId,
+        startDate: {
+          [Op.lte]: new Date(endDate)
+        },
+        endDate: {
+          [Op.gte]: new Date(startDate)
+        }
+      }
+    });
+    return !(results.length > 0);
+  }
+  server.post("/api/houses/check", (req, res) => {
+
   });
   
   server.get("/api/houses/:id", (req, res) => {
