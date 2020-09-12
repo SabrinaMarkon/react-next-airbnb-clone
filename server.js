@@ -5,6 +5,7 @@ const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const next = require("next");
+const Op = require('sequelize').Op
 
 // The store for site sessions to be saved to the database instead of default in-memory storage:
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
@@ -196,6 +197,42 @@ nextApp.prepare().then(() => {
     });
   });
 
+  const getDatesBetweenDates = (startDate, endDate) => {
+    let dates = [];
+    while (startDate < endDate) {
+      dates = [...dates, new Date(startDate)];
+      startDate.setDate(startDate.getDate() + 1);
+    }
+    dates = [...dates, endDate];
+    return dates;
+  }
+  server.post("/api/houses/booked", async (req, res) => {
+    const houseId = req.body.houseId;
+    const results = await Booking.findAll({
+      where: {
+        houseId: houseId,
+        endDate: {
+          [Op.gte]: new Date()
+        }
+      }
+    });
+    let bookedDates = [];
+    for (const result of results) {
+      const dates = getDatesBetweenDates(
+        new Date(result.startDate),
+        new Date(result.endDate)
+      );
+      bookedDates = [...bookedDates, ...dates];
+    }
+    // remove duplicates:
+    bookedDates = [...new Set(bookedDates.map(date => date))];
+    res.json({
+      status: "success",
+      message: "ok",
+      dates: bookedDates,
+    });
+  });
+  
   server.get("/api/houses/:id", (req, res) => {
     const { id } = req.params;
     House.findByPk(id).then((house) => {
