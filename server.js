@@ -5,7 +5,7 @@ const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const next = require("next");
-const Op = require('sequelize').Op
+const Op = require("sequelize").Op;
 
 // The store for site sessions to be saved to the database instead of default in-memory storage:
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
@@ -206,16 +206,16 @@ nextApp.prepare().then(() => {
     }
     dates = [...dates, endDate];
     return dates;
-  }
+  };
   server.post("/api/houses/booked", async (req, res) => {
     const houseId = req.body.houseId;
     const results = await Booking.findAll({
       where: {
         houseId: houseId,
         endDate: {
-          [Op.gte]: new Date()
-        }
-      }
+          [Op.gte]: new Date(),
+        },
+      },
     });
     let bookedDates = [];
     for (const result of results) {
@@ -227,7 +227,7 @@ nextApp.prepare().then(() => {
     }
     // remove duplicates:
     console.log(bookedDates);
-    bookedDates = [...new Set(bookedDates.map(date => date))];
+    bookedDates = [...new Set(bookedDates.map((date) => date))];
     res.json({
       status: "success",
       message: "ok",
@@ -242,19 +242,29 @@ nextApp.prepare().then(() => {
       where: {
         houseId: houseId,
         startDate: {
-          [Op.lte]: new Date(endDate)
+          [Op.lte]: new Date(endDate),
         },
         endDate: {
-          [Op.gte]: new Date(startDate)
-        }
-      }
+          [Op.gte]: new Date(startDate),
+        },
+      },
     });
     return !(results.length > 0);
-  }
-  server.post("/api/houses/check", (req, res) => {
-
+  };
+  server.post("/api/houses/check", async (req, res) => {
+    const startDate = req.body.startDate;
+    const endDate = req.body.endDate;
+    const houseId = req.body.houseId;
+    let message = "free";
+    if (!(await canBookThoseDates(houseId, startDate, endDate))) {
+      message = "busy"; // dates were already booked for this house.
+    }
+    res.json({
+      status: "success",
+      message: message,
+    });
   });
-  
+
   server.get("/api/houses/:id", (req, res) => {
     const { id } = req.params;
     House.findByPk(id).then((house) => {
