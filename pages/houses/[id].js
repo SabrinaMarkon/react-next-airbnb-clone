@@ -24,9 +24,8 @@ const calcNumberOfNightsBetweenDates = (startDate, endDate) => {
 };
 
 // Get array of all dates this house is booked for already:
-const getBookedDates = async () => {
+const getBookedDates = async houseId => {
   try {
-    const houseId = house.id;
     const response = await axios.post(
       "http://localhost:3000/api/houses/booked",
       {
@@ -107,6 +106,7 @@ const House = (props) => {
                 setStartDate(startDate);
                 setEndDate(endDate);
               }}
+              bookedDates={props.bookedDates}
             />
             {dateChosen && (
               <div>

@@ -226,7 +226,6 @@ nextApp.prepare().then(() => {
       bookedDates = [...bookedDates, ...dates];
     }
     // remove duplicates:
-    console.log(bookedDates);
     bookedDates = [...new Set(bookedDates.map((date) => date))];
     res.json({
       status: "success",

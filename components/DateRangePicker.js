@@ -34,9 +34,13 @@ const numberOfNightsBetweenDates = (startDate, endDate) => {
   return dayCount;
 };
 
-const DateRangePicker = ({ datesChanged }) => {
+const DateRangePicker = ({ datesChanged, bookedDates }) => {
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(tomorrow);
+
+  bookedDates = bookedDates.map(date => {
+    return new Date(date)
+  })
 
   return (
     <div className="date-range-picker-container">
@@ -50,9 +54,12 @@ const DateRangePicker = ({ datesChanged }) => {
           placeholder={`${dateFnsFormat(new Date(), format)}`}
           dayPickerProps={{
             modifiers: {
-              disabled: {
-                before: new Date(),
-              },
+              disabled: [
+                ...bookedDates, // we can't book any already-booked dates.
+                {
+                  before: new Date(), // start date can't be before today.
+                }
+              ],
             },
           }}
           onDayChange={(day) => {
@@ -79,7 +86,8 @@ const DateRangePicker = ({ datesChanged }) => {
           dayPickerProps={{
             modifiers: {
               disabled: [
-                startDate, // we can select startDate as the endDate
+                startDate, // we can't set the endDate to be the same as the startDate.
+                ...bookedDates, // we can't book any already-booked dates.
                 {
                   before: startDate, // we also can't select endDate before the startDate.
                 },
