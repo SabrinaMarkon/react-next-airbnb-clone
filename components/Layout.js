@@ -1,5 +1,5 @@
 import { useStoreState, useStoreActions } from "easy-peasy";
-import Head from "head/next";
+import Head from "next/head";
 import Header from "./Header";
 import Modal from "./Modal";
 import LoginModal from "./LoginModal";
