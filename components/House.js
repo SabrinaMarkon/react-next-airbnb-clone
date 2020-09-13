@@ -10,9 +10,9 @@ const House = (props) => {
           {props.type} - {props.town}
         </p>
         <p>{props.title}</p>
-        <p>
+        {/* <p>
           {props.rating} ({props.reviewsCount})
-        </p>
+        </p> */}
       </a>
     </Link>
   );

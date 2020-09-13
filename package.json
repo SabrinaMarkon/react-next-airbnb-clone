@@ -38,6 +38,7 @@
     "react": "^16.13.1",
     "react-day-picker": "^7.4.8",
     "react-dom": "^16.13.1",
-    "sequelize": "^6.3.4"
+    "sequelize": "^6.3.4",
+    "stripe": "^8.95.0"
   }
 }
