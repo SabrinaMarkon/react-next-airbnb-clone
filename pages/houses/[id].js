@@ -43,6 +43,27 @@ const getBookedDates = async houseId => {
   }
 };
 
+// Check if desired book date range overlaps with range already booked.
+const canReserve = async (houseId, startDate, endDate) => {
+  try {
+    const response = await axios.post("http://localhost:3000/api/houses/check", {
+      houseId, startDate, endDate
+    });
+    if (response.data.status === "error") {
+      alert(response.data.message);
+      return;
+    }
+    if (response.data.message === "busy") {
+      // alert(response.data.message);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+}
+
 const House = (props) => {
   // We get props from the getInitialProps function below.
   // We can't assign the JSX to a content variable like we do
@@ -120,6 +141,10 @@ const House = (props) => {
                   <button
                     className="reserve"
                     onClick={async () => {
+                      if (!(await canReserve(props.house.id, startDate, endDate))) {
+                        alert("Some or all of the dates chosen are not available");
+                        return;
+                      }
                       try {
                         const response = await axios.post(
                           "/api/houses/reserve",
@@ -133,8 +158,9 @@ const House = (props) => {
                           alert(response.data.message);
                           return;
                         }
+                        console.log(response.data);
                       } catch (error) {
-                        console.log(error);
+                        console.error(error);
                         return;
                       }
                     }}

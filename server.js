@@ -264,6 +264,67 @@ nextApp.prepare().then(() => {
     });
   });
 
+  server.post("/api/houses/reserve", async (req, res) => {
+    // Make sure user is logged in to be able to book a house:
+    if (!req.session.passport) {
+      res.writeHead(403, {
+        "Content-type": "application/json",
+      });
+      res.end(
+        JSON.stringify({
+          status: "error",
+          message: "Unauthorized",
+        })
+      );
+      return;
+    }
+    // Check if the user can book their chosen dates:
+    if (
+      !(await canBookThoseDates(
+        req.body.houseId,
+        req.body.startDate,
+        req.body.endDate
+      ))
+    ) {
+      // Not available/busy:
+      // res.writeHead(500, {
+      //   "Content-type": "application/json",
+      // });
+      res.writeHead(200, {
+        "Content-type": "application/json",
+      });
+      res.end(
+        JSON.stringify({
+          status: "error",
+          message:
+            "House is already booked on some or all of the selected dates",
+        })
+      );
+      return;
+    }
+    const userEmail = req.session.passport.user;
+    User.findOne({
+      where: { email: userEmail },
+    }).then((user) => {
+      Booking.create({
+        houseId: req.body.houseId,
+        userId: user.id,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+      }).then(() => {
+        res.writeHead(200, {
+          "Content-type": "application/json",
+        });
+        res.end(
+          JSON.stringify({
+            status: "success",
+            message: "ok",
+          })
+        );
+      });
+    });
+  });
+
   server.get("/api/houses/:id", (req, res) => {
     const { id } = req.params;
     House.findByPk(id).then((house) => {
