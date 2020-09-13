@@ -1,4 +1,5 @@
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useStoreState, useStoreActions } from "easy-peasy";
+import Head from "head/next";
 import Header from "./Header";
 import Modal from "./Modal";
 import LoginModal from "./LoginModal";
@@ -6,19 +7,30 @@ import RegistrationModal from "./RegistrationModal";
 
 const Layout = (props) => {
   // Properties:
-  const showModal = useStoreState(state => state.modals.showModal);
-  const showLoginModal = useStoreState(state => state.modals.showLoginModal);
-  const showRegistrationModal = useStoreState(state => state.modals.showRegistrationModal);
-  
+  const showModal = useStoreState((state) => state.modals.showModal);
+  const showLoginModal = useStoreState((state) => state.modals.showLoginModal);
+  const showRegistrationModal = useStoreState(
+    (state) => state.modals.showRegistrationModal
+  );
+
   // Actions:
-  const setHideModal = useStoreActions(actions => actions.modals.setHideModal);
-  const setShowLoginModal = useStoreActions(actions => actions.modals.setShowLoginModal);
-  const setShowRegistrationModal = useStoreActions(actions => actions.modals.setShowRegistrationModal);
+  const setHideModal = useStoreActions(
+    (actions) => actions.modals.setHideModal
+  );
+  const setShowLoginModal = useStoreActions(
+    (actions) => actions.modals.setShowLoginModal
+  );
+  const setShowRegistrationModal = useStoreActions(
+    (actions) => actions.modals.setShowRegistrationModal
+  );
 
   // the props.content property comes from the content prop
   // passed to Layout from its parent components.
   return (
     <div>
+      <Head>
+        <script src="https://js.stripe.com/v3/"></script>
+      </Head>
       <Header />
       <main>{props.content}</main>
       {showModal && (
