@@ -10,6 +10,8 @@ import Head from "next/head";
 import Layout from "../../components/Layout";
 import DateRangePicker from "../../components/DateRangePicker";
 
+const NEXT_PUBLIC_DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL;
+
 const calcNumberOfNightsBetweenDates = (startDate, endDate) => {
   const start = new Date(startDate); //clone
   const end = new Date(endDate); //clone
