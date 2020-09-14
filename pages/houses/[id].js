@@ -27,7 +27,7 @@ const calcNumberOfNightsBetweenDates = (startDate, endDate) => {
 const getBookedDates = async houseId => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/houses/booked",
+      `${NEXT_PUBLIC_DOMAIN_URL}/api/houses/booked`,
       {
         houseId,
       }
@@ -46,7 +46,7 @@ const getBookedDates = async houseId => {
 // Check if desired book date range overlaps with range already booked.
 const canReserve = async (houseId, startDate, endDate) => {
   try {
-    const response = await axios.post("http://localhost:3000/api/houses/check", {
+    const response = await axios.post(`${NEXT_PUBLIC_DOMAIN_URL}/api/houses/check`, {
       houseId, startDate, endDate
     });
     if (response.data.status === "error") {
@@ -200,7 +200,7 @@ const House = (props) => {
 
 House.getInitialProps = async ({ query }) => {
   const { id } = query;
-  const res = await fetch(`http://localhost:3000/api/houses/${id}`);
+  const res = await fetch(`${NEXT_PUBLIC_DOMAIN_URL}/api/houses/${id}`);
   const house = await res.json();
   const bookedDates = await getBookedDates(id); // passed as a prop to House.
   return {

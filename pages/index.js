@@ -5,6 +5,8 @@ import Head from "next/head";
 import House from "../components/House";
 import Layout from "../components/Layout";
 
+const NEXT_PUBLIC_DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL;
+
 const Index = (props) => {
   return (
     <Layout
@@ -40,7 +42,7 @@ const Index = (props) => {
 Index.getInitialProps = async () => {
   // domain and port hardcoded because full path is needed. 
   // Extract to env variable instead.
-  const res = await fetch("http://localhost:3000/api/houses");
+  const res = await fetch(`${NEXT_PUBLIC_DOMAIN_URL}/api/houses`);
   const houses = await res.json();
   return {
     houses,
