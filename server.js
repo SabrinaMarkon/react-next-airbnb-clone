@@ -376,6 +376,35 @@ nextApp.prepare().then(() => {
     });
   });
 
+  // Create a session to use for Stripe transaction.
+  server.post("/api/stripe/session", async (req, res) => {
+    const amount = req.body.amount;
+    const stripe = require("stripe")(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          name: "Booking house on NextBNB",
+          amount: amount * 100,
+          currency: "usd",
+          quantity: 1,
+        },
+      ],
+      success_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/bookings`,
+      cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/bookings`,
+    });
+    res.writeHead(200, {
+      "Content-type": "application/json",
+    });
+    res.end(
+      JSON.stringify({
+        status: "success",
+        sessionId: session.id,
+        stripePublicKey: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
+      })
+    );
+  });
+
   server.all("*", (req, res) => {
     return handle(req, res);
   });
