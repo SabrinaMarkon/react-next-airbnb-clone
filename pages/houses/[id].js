@@ -26,7 +26,7 @@ const calcNumberOfNightsBetweenDates = (startDate, endDate) => {
 };
 
 // Get array of all dates this house is booked for already:
-const getBookedDates = async houseId => {
+const getBookedDates = async (houseId) => {
   try {
     const response = await axios.post(
       `${NEXT_PUBLIC_DOMAIN_URL}/api/houses/booked`,
@@ -48,9 +48,14 @@ const getBookedDates = async houseId => {
 // Check if desired book date range overlaps with range already booked.
 const canReserve = async (houseId, startDate, endDate) => {
   try {
-    const response = await axios.post(`${NEXT_PUBLIC_DOMAIN_URL}/api/houses/check`, {
-      houseId, startDate, endDate
-    });
+    const response = await axios.post(
+      `${NEXT_PUBLIC_DOMAIN_URL}/api/houses/check`,
+      {
+        houseId,
+        startDate,
+        endDate,
+      }
+    );
     if (response.data.status === "error") {
       alert(response.data.message);
       return;
@@ -64,7 +69,7 @@ const canReserve = async (houseId, startDate, endDate) => {
     console.error(error);
     return;
   }
-}
+};
 
 const House = (props) => {
   // We get props from the getInitialProps function below.
@@ -143,25 +148,36 @@ const House = (props) => {
                   <button
                     className="reserve"
                     onClick={async () => {
-                      if (!(await canReserve(props.house.id, startDate, endDate))) {
-                        alert("Some or all of the dates chosen are not available");
+                      if (
+                        !(await canReserve(props.house.id, startDate, endDate))
+                      ) {
+                        alert(
+                          "Some or all of the dates chosen are not available"
+                        );
                         return;
                       }
                       try {
                         // Call the stripe/session endpoint to make a Stripe session:
-                        const sessionResponse = await axios.post("/api/stripe/session", { amount: props.house.price * numberOfNightsBetweenDates });
+                        const sessionResponse = await axios.post(
+                          "/api/stripe/session",
+                          {
+                            amount:
+                              props.house.price * numberOfNightsBetweenDates,
+                          }
+                        );
                         if (sessionResponse.data.status === "error") {
                           alert(sessionResponse.data.message);
                           return;
                         }
                         const sessionId = sessionResponse.data.sessionId;
-                        const stripePublicKey = sessionResponse.data.stripePublicKey;
+                        const stripePublicKey =
+                          sessionResponse.data.stripePublicKey;
 
-                        // We have a transaction sessionId now, so post that to the 
+                        // We have a transaction sessionId now, so post that to the
                         // houses/reserve endpoint to save to the bookings table (but
                         // still set to unpaid for this record until Stripe sends a
                         // confirmation webhook).
-                        const response = await axios.post(
+                        const reserveResponse = await axios.post(
                           "/api/houses/reserve",
                           {
                             houseId: props.house.id,
@@ -170,11 +186,20 @@ const House = (props) => {
                             sessionId,
                           }
                         );
-                        if (response.data.status === "error") {
-                          alert(response.data.message);
+                        if (reserveResponse.data.status === "error") {
+                          alert(reserveResponse.data.message);
                           return;
                         }
-                        console.log(response.data);
+
+                        console.log(reserveResponse.data);
+
+                        // After the booking is added to the database (marked as unpaid),
+                        // send the user to the Stripe checkout page:
+                        const stripe = Stripe(stripePublicKey);
+                        const { error } = await stripe.redirectToCheckout({
+                          sessionId,
+                        });
+
                       } catch (error) {
                         console.error(error);
                         return;
