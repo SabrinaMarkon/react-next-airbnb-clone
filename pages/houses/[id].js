@@ -148,12 +148,26 @@ const House = (props) => {
                         return;
                       }
                       try {
+                        // Call the stripe/session endpoint to make a Stripe session:
+                        const sessionResponse = await axios.post("/api/stripe/session", { amount: props.house.price * numberOfNightsBetweenDates });
+                        if (sessionResponse.data.status === "error") {
+                          alert(sessionResponse.data.message);
+                          return;
+                        }
+                        const sessionId = sessionResponse.data.sessionId;
+                        const stripePublicKey = sessionResponse.data.stripePublicKey;
+
+                        // We have a transaction sessionId now, so post that to the 
+                        // houses/reserve endpoint to save to the bookings table (but
+                        // still set to unpaid for this record until Stripe sends a
+                        // confirmation webhook).
                         const response = await axios.post(
                           "/api/houses/reserve",
                           {
                             houseId: props.house.id,
                             startDate,
                             endDate,
+                            sessionId,
                           }
                         );
                         if (response.data.status === "error") {
