@@ -286,10 +286,6 @@ nextApp.prepare().then(() => {
         req.body.endDate
       ))
     ) {
-      // Not available/busy:
-      // res.writeHead(500, {
-      //   "Content-type": "application/json",
-      // });
       res.writeHead(200, {
         "Content-type": "application/json",
       });
@@ -311,6 +307,7 @@ nextApp.prepare().then(() => {
         userId: user.id,
         startDate: req.body.startDate,
         endDate: req.body.endDate,
+        sessionId: req.body.sesssionId,
       }).then(() => {
         res.writeHead(200, {
           "Content-type": "application/json",
@@ -359,24 +356,7 @@ nextApp.prepare().then(() => {
     });
   });
 
-  server.post("/api/houses/reserve", (req, res) => {
-    const userEmail = req.session.passport.user;
-    User.findOne({ where: { email: userEmail } }).then((user) => {
-      Booking.create({
-        houseId: req.body.houseId,
-        userId: user.id,
-        startDate: req.body.startDate,
-        endDate: req.body.endDate,
-      }).then(() => {
-        res.writeHead(200, {
-          "Content-type": "application/json",
-        });
-        res.end(JSON.stringify({ status: "success", message: "ok" }));
-      });
-    });
-  });
-
-  // Create a session to use for Stripe transaction.
+  // Create a Stripe session for a transaction.
   server.post("/api/stripe/session", async (req, res) => {
     const amount = req.body.amount;
     const stripe = require("stripe")(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
