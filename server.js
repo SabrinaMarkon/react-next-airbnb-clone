@@ -72,8 +72,19 @@ const handle = nextApp.getRequestHandler();
 nextApp.prepare().then(() => {
   const server = express();
   // middleware for handling sessions:
+
   server.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
-  server.use(bodyParser.json()); // parse application/json
+
+  // parse application/json
+  server.use(
+    bodyParser.json({
+      verify: (req, res, buf) => {
+        // makes rawBody available which is needed for Stripe processing below.
+        req.rawBody = buf;
+      },
+    })
+  );
+  
   server.use(
     session({
       secret:
