@@ -370,6 +370,7 @@ nextApp.prepare().then(() => {
           quantity: 1,
         },
       ],
+      // bookings route isn't in server.js because it is a file directly in /pages (Next.js)
       success_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/bookings`,
       cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/bookings`,
     });
@@ -381,6 +382,18 @@ nextApp.prepare().then(() => {
         status: "success",
         sessionId: session.id,
         stripePublicKey: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
+      })
+    );
+  });
+
+  server.post("/api/stripe/webhook", async (req, res) => {
+    res.writeHead(200, {
+      "Content-type": "application/json",
+    });
+    // Send a received: true JSON response to Stripe to tell it that "we got it":
+    res.end(
+      JSON.stringify({
+        received: true,
       })
     );
   });
