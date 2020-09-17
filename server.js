@@ -439,6 +439,26 @@ nextApp.prepare().then(() => {
     );
   });
 
+  // Use this route to clean out unpaid bookings:
+  server.post("/api/bookings/clean", (req, res) => {
+    Booking.destroy({
+      where: {
+        paid: false,
+      },
+    });
+
+    res.writeHead(200, {
+      "Content-Type": "application/json",
+    });
+
+    res.end(
+      JSON.stringify({
+        status: "success",
+        message: "ok",
+      })
+    );
+  });
+
   server.all("*", (req, res) => {
     return handle(req, res);
   });
