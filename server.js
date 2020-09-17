@@ -84,7 +84,7 @@ nextApp.prepare().then(() => {
       },
     })
   );
-  
+
   server.use(
     session({
       secret:
@@ -397,7 +397,37 @@ nextApp.prepare().then(() => {
     );
   });
 
+  // Endpoint to analyze Stripe webhook:
   server.post("/api/stripe/webhook", async (req, res) => {
+    const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+    const endpointSecret = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET;
+    const sig = req.headers["stripe-signature"];
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(req.rawBody, sig, endpointSecret);
+    } catch (error) {
+      res.writeHead(400, {
+        "Content-type": "application/json",
+      });
+      console.error(error.message);
+      res.end(
+        JSON.stringify({
+          status: "success",
+          message: `Webhook Error: ${error.message}`,
+        })
+      );
+      return;
+    }
+    if (event.type === "checkout.session.completed") {
+      const sessionId = event.data.object.id;
+      try {
+        // Update database to mark booking as paid:
+        Booking.update({ paid: true }, { where: { sessionId } });
+      } catch (error) {
+        console.error(error);
+      }
+    }
     res.writeHead(200, {
       "Content-type": "application/json",
     });
