@@ -1,5 +1,6 @@
 import axios from "axios";
 import Head from "next/head";
+import Link from "next/link";
 import Layout from "../components/Layout";
 
 const NEXT_PUBLIC_DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL;
@@ -10,9 +11,9 @@ const Bookings = (props) => {
       content={
         <div>
           <Head>
-            <title>Your bookings</title>
+            <title>Your upcoming bookings</title>
           </Head>
-          <h2>Your bookings</h2>
+          <h2>Your upcoming bookings</h2>
 
           <div className="bookings">
             {props.bookings.map((booking, index) => {
@@ -28,6 +29,12 @@ const Bookings = (props) => {
                       {new Date(booking.booking.startDate).toDateString()} to{" "}
                       {new Date(booking.booking.endDate).toDateString()}
                     </p>
+                    <Link
+                      href="/houses/[id]"
+                      as={"/houses/" + booking.booking.houseId}
+                    >
+                      <a>Go to house details</a>
+                    </Link>
                   </div>
                 </div>
               );
@@ -58,11 +65,13 @@ const Bookings = (props) => {
 };
 
 // Get the bookings prop to use in the JSX above:
-Bookings.getInitialProps = async ctx => {
-    const response = await axios.get(`${NEXT_PUBLIC_DOMAIN_URL}/api/bookings/list`);
-    return {
-        bookings: response.data
-    }
-}
+Bookings.getInitialProps = async (ctx) => {
+  const response = await axios.get(
+    `${NEXT_PUBLIC_DOMAIN_URL}/api/bookings/list`
+  );
+  return {
+    bookings: response.data,
+  };
+};
 
 export default Bookings;
