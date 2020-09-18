@@ -1,8 +1,10 @@
+import axios from "axios";
+import Head from "next/head";
 import Layout from "../components/Layout";
 
 const NEXT_PUBLIC_DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL;
 
-const Bookings = () => {
+const Bookings = (props) => {
   return (
     <Layout
       content={

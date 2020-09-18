@@ -459,6 +459,35 @@ nextApp.prepare().then(() => {
     );
   });
 
+  server.get("/api/bookings/list", async (req, res) => {
+    Booking.findAndCountAll({
+      where: {
+        paid: true,
+        endDate: {
+          // Only get upcoming bookings.
+          [Op.gte]: new Date()
+        },
+        // userId: user.id,
+      },
+      order: [["startDate", "ASC"]],
+    }).then(async (result) => {
+      // wrap Promise.all around the map() iteration so we can use async inside the map!
+      const bookings = await Promise.all(
+        result.rows.map(async (booking) => {
+          const data = {};
+          data.booking = booking.dataValues;
+          // Get some extra info about each House from the House table (using findByPk - "find by primary key")
+          data.house = (await House.findByPk(data.booking.houseId)).dataValues;
+          return data;
+        })
+      );
+      res.writeHead(200, {
+        "Content-type": "application/json",
+      });
+      res.end(JSON.stringify(bookings));
+    });
+  });
+
   server.all("*", (req, res) => {
     return handle(req, res);
   });
