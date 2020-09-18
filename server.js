@@ -460,14 +460,32 @@ nextApp.prepare().then(() => {
   });
 
   server.get("/api/bookings/list", async (req, res) => {
+    // Check if a user is logged in using passport so we can show their bookings:
+    if (!req.session.passport || !req.session.passport.user) {
+      res.writeHead(403, {
+        "Content-Type": "application/json",
+      });
+      res.end(
+        JSON.stringify({
+          status: "error",
+          message: "Unauthorized",
+        })
+      );
+
+      return;
+    }
+
+    const userEmail = req.session.passport.user;
+    const user = await User.findOne({ where: { email: userEmail } });
+
     Booking.findAndCountAll({
       where: {
         paid: true,
         endDate: {
           // Only get upcoming bookings.
-          [Op.gte]: new Date()
+          [Op.gte]: new Date(),
         },
-        // userId: user.id,
+        userId: user.id,
       },
       order: [["startDate", "ASC"]],
     }).then(async (result) => {

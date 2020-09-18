@@ -66,9 +66,12 @@ const Bookings = (props) => {
 
 // Get the bookings prop to use in the JSX above:
 Bookings.getInitialProps = async (ctx) => {
-  const response = await axios.get(
-    `${NEXT_PUBLIC_DOMAIN_URL}/api/bookings/list`
-  );
+  const response = await axios({
+    method: "get",
+    url: `${NEXT_PUBLIC_DOMAIN_URL}/api/bookings/list`,
+    /* IMPORTANT: Need to pass headers to axios so cookies work on server side too. Otherwise we get an error if we refresh the bookings page because the app thinks we are logged out. The browser passes cookies client-side when making requests to the API. On the server-side, we must manually pass the cookie from req.headers.cookie.*/
+    headers: ctx.req ? { cookie: ctx.req.headers.cookie } : undefined,
+  });
   return {
     bookings: response.data,
   };
