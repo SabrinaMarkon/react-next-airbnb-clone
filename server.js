@@ -563,6 +563,7 @@ nextApp.prepare().then(() => {
     });
     res.end(
       JSON.stringify({
+        bookings,
         houses,
       })
     );
