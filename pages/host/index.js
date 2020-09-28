@@ -98,6 +98,7 @@ Host.getInitialProps = async (ctx) => {
   const response = await axios({
     method: "get",
     url: "http://localhost:3000/api/host/list",
+    // Cookie is to make sessions work with Next.js SSR:
     headers: ctx.req ? { cookie: ctx.req.headers.cookie } : undefined,
   });
 
