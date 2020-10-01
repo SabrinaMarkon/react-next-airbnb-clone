@@ -1,7 +1,5 @@
 // For the details of a house.
 
-// TODO: add full domain and port to an env. variable instead of hard-coded.
-
 import fetch from "isomorphic-unfetch"; // for SSR.
 import axios from "axios";
 import { useState } from "react";
