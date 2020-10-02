@@ -104,6 +104,11 @@ const House = (props) => {
               {props.house.type} - {props.house.town}
             </p>
             <p>{props.house.title}</p>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: props.house.description,
+              }}
+            ></div>
             {props.house.reviewsCount ? (
               <div className="reviews">
                 <h3>{props.house.reviewsCount} Reviews</h3>
@@ -197,7 +202,6 @@ const House = (props) => {
                         const { error } = await stripe.redirectToCheckout({
                           sessionId,
                         });
-
                       } catch (error) {
                         console.error(error);
                         return;
