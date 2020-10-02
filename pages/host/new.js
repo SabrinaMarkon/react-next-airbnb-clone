@@ -2,7 +2,7 @@
 
 import Head from "next/head";
 import Layout from "../../components/Layout";
-import HouseForm from ".../../components/HouseForm";
+import HouseForm from "../../components/HouseForm";
 
 const NewHouse = () => {
   return (

@@ -3,7 +3,7 @@
 import axios from "axios";
 import Head from "next/head";
 import Layout from "../../components/Layout";
-import HouseForm from ".../../components/HouseForm";
+import HouseForm from "../../components/HouseForm";
 
 const NEXT_PUBLIC_DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL;
 
