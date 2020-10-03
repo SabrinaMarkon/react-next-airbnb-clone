@@ -720,6 +720,28 @@ nextApp.prepare().then(() => {
     }
 
     const image = req.files.image;
+    // Name image file with a random filename so existing files with the same name will not be overwritten:
+    const fileName = randomstring.generate(7) + image.name.replace(/\s/g, "");
+    const path = __dirname + "/public/img/houses/" + fileName;
+
+    // Use mv() method to upload the file:
+    image.mv(path, (error) => {
+      if (error) {
+        console.error(error);
+        res.writeHead(500, {
+          "Content-Type": "application/json",
+        });
+        res.end(JSON.stringify({ status: "error", message: error }));
+        return;
+      }
+
+      res.writeHead(200, {
+        "Content-Type": "application/json",
+      });
+      res.end(
+        JSON.stringify({ status: "success", path: "/img/houses/" + fileName })
+      );
+    });
   });
 
   server.all("*", (req, res) => {

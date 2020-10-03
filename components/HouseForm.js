@@ -123,15 +123,15 @@ const HouseForm = (props) => {
               const files = event.target.files;
               const formData = new FormData();
               formData.append("image", files[0]);
-              // This is invoked when the file input changes (an image had been selected). 
+              // This is invoked when the file input changes (an image had been selected).
               // In there, we get the image from event.target.files and we POST it to /host/image:
               const response = await axios.post("/api/host/image", formData);
-              // We expect a path property coming back, which will be the URL of our image, 
+              // We expect a path property coming back, which will be the URL of our image,
               // and we assign it using the setPicture hook update function:
               setPicture("http://localhost:3000" + response.data.path);
             }}
           />
-          {picture ? <img src={picture} width="200" alt="House image" /> : ''}
+          {picture ? <img src={picture} width="200" alt="House image" /> : ""}
         </p>
         <div>
           <label>House description</label>
