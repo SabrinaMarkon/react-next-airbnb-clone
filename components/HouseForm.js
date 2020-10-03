@@ -75,7 +75,7 @@ const HouseForm = (props) => {
               alert(response.data.message);
               return;
             }
-
+            // Commented out below because react-pell editor style buttons seem to cause the form to submit and redirect to /host.
             Router.push("/host");
           } catch (error) {
             alert(error.response.data.message);

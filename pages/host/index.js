@@ -86,6 +86,11 @@ const Host = (props) => {
 
             .house img {
               width: 100px;
+              align-self: start;
+            }
+
+            .house h2 {
+              margin-top: 0px;
             }
           `}</style>
         </div>

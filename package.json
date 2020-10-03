@@ -35,6 +35,7 @@
     "nodemon": "^2.0.4",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "pell": "^1.0.6",
     "pg": "^8.3.0",
     "react": "^16.13.1",
     "react-day-picker": "^7.4.8",

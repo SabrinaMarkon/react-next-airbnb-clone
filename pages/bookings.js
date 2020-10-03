@@ -57,6 +57,10 @@ const Bookings = (props) => {
             .booking img {
               width: 180px;
             }
+            
+            .booking h2 {
+              margin-top: 0px;
+            }
           `}</style>
         </div>
       }
