@@ -6,6 +6,7 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const next = require("next");
 const Op = require("sequelize").Op;
+const sanitizeHtml = require("sanitize-html");
 
 // The store for site sessions to be saved to the database instead of default in-memory storage:
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
@@ -591,6 +592,12 @@ nextApp.prepare().then(() => {
     const userEmail = req.session.passport.user;
     User.findOne({ where: { email: userEmail } }).then((user) => {
       houseData.host = user.id; // Add user.id to submitted data about house.
+
+      // Clean the description and remove all tags except the ones we specifically allow.
+      houseData.description = sanitizeHtml(houseData.description, {
+        allowedTags: ["b", "i", "em", "strong", "p", "br"],
+      });
+
       House.create(houseData).then(() => {
         res.writeHead(200, {
           "Content-type": "application/json",
@@ -644,6 +651,11 @@ nextApp.prepare().then(() => {
             );
             return;
           }
+
+          // Clean the description and remove all tags except the ones we specifically allow.
+          houseData.description = sanitizeHtml(houseData.description, {
+            allowedTags: ["b", "i", "em", "strong", "p", "br"],
+          });
 
           // Update the house details using Sequelize update() method:
           House.update(houseData, {
