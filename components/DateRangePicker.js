@@ -4,10 +4,6 @@ import { DateUtils } from "react-day-picker";
 import dateFnsFormat from "date-fns/format";
 import dateFnsParse from "date-fns/parse";
 
-// Next.js needs @zeit/next-css installed to know how to handle imported CSS files.
-// Add a next.config.js in the root to support it.
-import "react-day-picker/lib/style.css";
-
 const format = "dd MMM yyyy";
 const today = new Date();
 const tomorrow = new Date(today);

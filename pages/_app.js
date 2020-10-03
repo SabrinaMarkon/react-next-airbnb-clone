@@ -2,10 +2,13 @@
 import App from "next/app";
 import { StoreProvider } from "easy-peasy";
 import store from "../store";
+import "react-day-picker/lib/style.css";
 
 // workaround for bug where <Link>s in index.js->House.js to [id].js do nothing when clicked!
 // See https://github.com/vercel/next.js/issues/5291
-import "../blank.css";
+// Commented out because importing the react-day-picker css above achieved the same. These comments
+// are left here to remember in the future for other apps.
+// import "../blank.css";
 
 // This operation makes now our store available in every component of the app:
 function MyApp({ Component, pageProps, user }) {
