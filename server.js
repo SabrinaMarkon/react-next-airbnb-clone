@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const next = require("next");
 const Op = require("sequelize").Op;
 const sanitizeHtml = require("sanitize-html");
+const fileupload = require("express-fileupload");
 
 // The store for site sessions to be saved to the database instead of default in-memory storage:
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
@@ -101,6 +102,12 @@ nextApp.prepare().then(() => {
     }),
     passport.initialize(), // initialize passport to be ready to use.
     passport.session() // handle login sessions.
+  );
+
+  // Make sure server can parse file uploads with the express-fileupload package:
+  server.use(
+    //...
+    fileupload()
   );
 
   // user registration endpoint (moved from register.js to centralize API)
