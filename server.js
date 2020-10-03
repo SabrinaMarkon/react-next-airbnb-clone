@@ -8,6 +8,7 @@ const next = require("next");
 const Op = require("sequelize").Op;
 const sanitizeHtml = require("sanitize-html");
 const fileupload = require("express-fileupload");
+const randomstring = require('randomstring');
 
 // The store for site sessions to be saved to the database instead of default in-memory storage:
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
