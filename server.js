@@ -703,6 +703,25 @@ nextApp.prepare().then(() => {
     });
   });
 
+  // Upload an image to the server from the add/edit house form:
+  server.post("/api/host/image", (req, res) => {
+    if (!req.session.passport) {
+      res.writeHead(403, {
+        "Content-Type": "application/json",
+      });
+      res.end(
+        JSON.stringify({
+          status: "error",
+          message: "Unauthorized",
+        })
+      );
+
+      return;
+    }
+
+    const image = req.files.image;
+  });
+
   server.all("*", (req, res) => {
     return handle(req, res);
   });
